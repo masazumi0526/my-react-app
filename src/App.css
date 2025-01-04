@@ -3,14 +3,20 @@ body {
   margin: 0;
   padding: 0;
   background-color: #f4f4f4;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start; /* 上方向から配置 */
+  min-height: 100vh; /* スクロール可能エリアを確保 */
 }
 
 .app {
-  max-width: 800px;
-  margin: 0 auto;
+  max-width: 700px; /* 少し幅を縮めて余白を減らす */
+  width: 90%; /* 画面の90%幅に調整 */
+  margin: 20px 0; /* 上下に余白を追加 */
   padding: 20px;
   background-color: #fff;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  overflow: auto; /* コンテンツが多い場合にスクロール可能に */
 }
 
 .header {
