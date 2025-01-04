@@ -1,3 +1,4 @@
+// App.jsx
 import { useState, useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route, Link, useNavigate, useParams } from "react-router-dom";
 import "./App.css";
@@ -92,13 +93,13 @@ function PostList() {
       setError(null);
       try {
         const response = await fetch(
-          `https://railway.bulletinboard.techtrain.dev/threads/${thread_id}/posts`
+          `https://railway.bulletinboard.techtrain.dev/threads/${thread_id}/posts?offset=0`
         );
         if (!response.ok) {
           throw new Error("投稿の取得に失敗しました");
         }
         const data = await response.json();
-        setPosts(data);
+        setPosts(data.posts);
       } catch (err) {
         setError(err.message);
       } finally {
@@ -116,7 +117,7 @@ function PostList() {
       <ul className="post-list">
         {posts.map((post) => (
           <li key={post.id} className="post-item">
-            {post.content}
+            {post.post}
           </li>
         ))}
       </ul>
