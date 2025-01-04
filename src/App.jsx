@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
-import { BrowserRouter as Router, Routes, Route, Link, useNavigate } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Link, useNavigate, useParams } from "react-router-dom";
 import "./App.css";
+import NewThread from "./NewThread";
 
 function App() {
   return (
@@ -13,6 +14,7 @@ function App() {
         <Routes>
           <Route path="/" element={<ThreadList />} />
           <Route path="/threads/new" element={<NewThread />} />
+          <Route path="/threads/:thread_id" element={<PostList />} />
         </Routes>
       </div>
     </Router>
@@ -55,7 +57,7 @@ function ThreadList() {
       <ul className="thread-list">
         {threads.map((thread) => (
           <li key={thread.id} className="thread-item">
-            {thread.title}
+            <Link to={`/threads/${thread.id}`}>{thread.title}</Link>
           </li>
         ))}
       </ul>
@@ -78,57 +80,46 @@ function ThreadList() {
   );
 }
 
-function NewThread() {
-  const [title, setTitle] = useState("");
+function PostList() {
+  const { thread_id } = useParams();
+  const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const navigate = useNavigate();
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setLoading(true);
-    setError(null);
-    try {
-      const response = await fetch(
-        "https://railway.bulletinboard.techtrain.dev/threads",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ title }),
+  useEffect(() => {
+    const fetchPosts = async () => {
+      setLoading(true);
+      setError(null);
+      try {
+        const response = await fetch(
+          `https://railway.bulletinboard.techtrain.dev/threads/${thread_id}/posts`
+        );
+        if (!response.ok) {
+          throw new Error("投稿の取得に失敗しました");
         }
-      );
-      if (!response.ok) {
-        throw new Error("スレッドの作成に失敗しました");
+        const data = await response.json();
+        setPosts(data);
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
       }
-      navigate("/");
-    } catch (err) {
-      setError(err.message);
-    } finally {
-      setLoading(false);
-    }
-  };
+    };
+    fetchPosts();
+  }, [thread_id]);
 
   return (
     <main className="main-container">
-      <h2 className="main-title">新しいスレッドを作成</h2>
-      <form onSubmit={handleSubmit} className="new-thread-form">
-        <label>
-          スレッドタイトル:
-          <input
-            type="text"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-            required
-            className="input"
-          />
-        </label>
-        <button type="submit" className="button" disabled={loading}>
-          {loading ? "作成中..." : "作成"}
-        </button>
-      </form>
+      <h2 className="main-title">投稿一覧</h2>
+      {loading && <p>読み込み中...</p>}
       {error && <p className="error">{error}</p>}
+      <ul className="post-list">
+        {posts.map((post) => (
+          <li key={post.id} className="post-item">
+            {post.content}
+          </li>
+        ))}
+      </ul>
     </main>
   );
 }

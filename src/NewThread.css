@@ -1,0 +1,32 @@
+/* NewThread.css */
+.new-thread-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  .input {
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    width: 100%;
+  }
+  
+  .button {
+    padding: 10px 15px;
+    background-color: #76c7a9;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .button:disabled {
+    background-color: #ccc;
+  }
+  
+  .error {
+    color: red;
+    font-size: 0.875rem;
+  }
+  
