@@ -3,14 +3,10 @@ import { useNavigate } from "react-router-dom";
 import "./NewThread.css"; // スタイルを別のファイルに分ける場合
 
 function NewThread() {
-  // const [title, setTitle] = useState("");
-  let title = "";
+  const [title, setTitle] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const navigate = useNavigate();
-  function onChange(e) {
-    title = e.currentTarget.value;
-  }
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -48,8 +44,7 @@ function NewThread() {
           <input
             type="text"
             value={title}
-            // onChange={(e) => setTitle(e.target.value)}
-            onChange={onChange}
+            onChange={(e) => setTitle(e.target.value)}
             required
             className="input"
           />
