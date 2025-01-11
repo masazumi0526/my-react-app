@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { BrowserRouter as Router, Routes, Route, Link, useNavigate, useParams } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Link, useParams } from "react-router-dom";
 import "./App.css";
 import NewThread from "./NewThread";
 
@@ -8,7 +8,9 @@ function App() {
     <Router>
       <div className="app">
         <header className="header">
-          <h1 className="header-title">掲示板</h1>
+          <Link to="/" className="header-title-link">
+            <h1 className="header-title">掲示板</h1>
+          </Link>
           <Link to="/threads/new" className="header-link">★新しいスレッドをたてる★</Link>
         </header>
         <Routes>
@@ -85,8 +87,8 @@ function PostList() {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const [newPost, setNewPost] = useState(""); // 新しい投稿内容
-  const [posting, setPosting] = useState(false); // 投稿中フラグ
+  const [newPost, setNewPost] = useState("");
+  const [posting, setPosting] = useState(false);
 
   useEffect(() => {
     const fetchPosts = async () => {
@@ -129,10 +131,9 @@ function PostList() {
       if (!response.ok) {
         throw new Error("投稿に失敗しました");
       }
-      // 投稿が成功したら、即座に投稿一覧に反映させる
       const data = await response.json();
-      setPosts((prevPosts) => [data, ...prevPosts]); // 新しい投稿を先頭に追加
-      setNewPost(""); // フォームをリセット
+      setPosts((prevPosts) => [data, ...prevPosts]);
+      setNewPost("");
     } catch (err) {
       setError(err.message);
     } finally {
